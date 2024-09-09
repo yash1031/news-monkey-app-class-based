@@ -102,7 +102,7 @@ export default class News extends Component {
     return (
       <>
         {/* <div className='container my-3'> */}
-        <h2 style={{marginTop:"10px", marginLeft: "5%"}}>Top {this.props.category==='general'? '': this.capital(this.props.category)} Headlines</h2>
+        <h2 style={{marginTop:"50px", marginLeft: "6%", marginBottom: "10px"}}>Top {this.props.category==='general'? '': this.capital(this.props.category)} Headlines</h2>
          {this.state.loading && <Spinner/>}
 
         {/* for fixed size pages  */}
