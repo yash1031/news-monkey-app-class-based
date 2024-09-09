@@ -22,7 +22,7 @@ export default class News extends Component {
   }
 
   static defaultProps = {
-    country: 'in',
+    country: 'us',
     pageSize: 10,
     category: 'general'
   }
@@ -31,6 +31,10 @@ export default class News extends Component {
     country: PropTypes.string,
     pageSize: PropTypes.number,
     category: PropTypes.string
+  }
+
+  capital=(string)=> {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   makeRequest = async (url) => {
@@ -98,7 +102,7 @@ export default class News extends Component {
     return (
       <>
         {/* <div className='container my-3'> */}
-        <h2 className='text-center'>NewsMonkey - Top Headlines</h2>
+        <h2 style={{marginTop:"10px", marginLeft: "5%"}}>Top {this.props.category==='general'? '': this.capital(this.props.category)} Headlines</h2>
          {this.state.loading && <Spinner/>}
 
         {/* for fixed size pages  */}
