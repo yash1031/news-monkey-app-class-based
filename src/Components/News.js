@@ -5,12 +5,8 @@ import Spinner from './Spinner'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default class News extends Component {
-  // static PropTypes = {
-  //   prop: PropTypes
-  // }
-
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
       articles: [],
       loading: true,
@@ -51,38 +47,6 @@ export default class News extends Component {
     this.props.setProgress(100);
   }
 
-  async componentDidMount () {
-    this.props.setProgress(0);
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&pageSize=${this.props.pageSize}&page=${this.state.page}&apiKey=${this.state.apiKey2}`
-    this.setState({ loading: true })
-    let data = await fetch(url);
-    this.props.setProgress(50);
-    let parsedData = await data.json()
-    this.setState({
-      articles: parsedData.articles,
-      loading: false,
-      articlesCount: parsedData.totalResults
-    })
-    // this.forceUpdate();
-    this.props.setProgress(100);
-  }
-
-  /* handlePrevious = () => {
-    this.setState({
-      page: this.state.page - 1
-    })
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&pageSize=${this.props.pageSize}&page=${this.state.page}&apiKey=${this.state.apiKey2}`
-    this.makeRequest(url)
-  }
-
-  handleNext = () => {
-    this.setState({
-      page: this.state.page + 1
-    })
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&pageSize=${this.props.pageSize}&page=${this.state.page}&apiKey=${this.state.apiKey2}`
-    this.makeRequest(url)
-  }*/
-
   fetchMoreData = async () => {
     // this.setState({
     //   page: this.state.page + 1
@@ -97,29 +61,27 @@ export default class News extends Component {
     })
   }
 
+  async componentDidMount () {
+    this.props.setProgress(0);
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&pageSize=${this.props.pageSize}&page=${this.state.page}&apiKey=${this.state.apiKey2}`
+    this.setState({ loading: true })
+    let data = await fetch(url);
+    this.props.setProgress(50);
+    let parsedData = await data.json()
+    this.setState({
+      articles: parsedData.articles,
+      loading: false,
+      articlesCount: parsedData.totalResults
+    })
+    this.props.setProgress(100);
+  }
+
   render () {
-    // console.log("Rending......", this.props.category, this.state.articles);
     return (
       <>
-        {/* <div className='container my-3'> */}
         <h2 style={{marginTop:"50px", marginLeft: "6%", marginBottom: "10px"}}>Top {this.props.category==='general'? '': this.capital(this.props.category)} Headlines</h2>
          {this.state.loading && <Spinner/>}
 
-        {/* for fixed size pages  */}
-        {/* <div className="row">
-        {!this.state.loading &&
-          this.state.articles.map((element) => {
-            // console.log(element.author,element.publishedAt)
-            return <div key={element.url}> 
-              <NewsItem title={element.title} desc={element.description} image= {element.urlToImage} newsUrl={element.url} author={element.author} source={element.source.name} publishedTime={element.publishedAt}/>
-            </div>
-          })
-        }
-        </div> */}
-        {/* <div className="container my-15 d-flex justify-content-between">
-          <button className="btn btn-primary" disabled={this.state.page==1} onClick={this.handlePrevious}> &larr; Previous</button>
-          <button className="btn btn-primary" disabled={Math.ceil(this.state.articlesCount/this.props.pageSize)=== this.state.page} onClick={this.handleNext}>Next &rarr;</button>
-        </div>  */}
          {/*Put the scroll bar always on the bottom*/}
         <InfiniteScroll
           dataLength={this.state.articles.length}
@@ -130,8 +92,6 @@ export default class News extends Component {
           <div className='container my-3'>
             <div className='row'>
               {this.state.articles.map(element => {
-                // console.log(element)
-                // console.log(element.author,element.publishedAt)
                 return (
                   <div key={element.url}>
                     <NewsItem
